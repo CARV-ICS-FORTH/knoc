@@ -1,0 +1,39 @@
+
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: lovely-bear
+  namespace: default
+  labels:
+    example: 'true'
+spec:
+  arguments:
+    parameters:
+      - name: message
+        value: hello carv
+  entrypoint: argosay
+  templates:
+    - name: argosay
+      inputs:
+        parameters:
+          - name: message
+            value: '{{workflow.parameters.message}}'
+      container:
+        name: main
+        image: 'argoproj/argosay:v2'
+        # command:
+        #   - /argosay
+        args:
+          - echo
+          - '{{inputs.parameters.message}}'
+  dnsPolicy: ClusterFirst
+  nodeSelector:
+    kubernetes.io/role: agent
+    beta.kubernetes.io/os: linux
+    type: virtual-kubelet
+  tolerations:
+  - key: virtual-kubelet.io/provider
+    operator: Exists
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
