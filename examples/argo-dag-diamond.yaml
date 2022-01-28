@@ -15,7 +15,7 @@ spec:
   entrypoint: diamond
   podMetadata:
     annotations:
-      slurm-job.knoc.io/flags: "--hold"
+      slurm-job.knoc.io/flags: "--mem=4G "
   templates:
   - name: diamond
     dag:

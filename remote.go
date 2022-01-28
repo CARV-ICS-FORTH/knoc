@@ -137,11 +137,6 @@ func stopRemoteExecutionInstance(ctx context.Context, client *simplessh.Client, 
 func RemoteExecution(p *KNOCProvider, ctx context.Context, mode int8, imageLocation string, pod *v1.Pod, container v1.Container) error {
 	var err error
 	instance_name := BuildRemoteExecutionInstanceName(container, pod)
-	for ann := range pod.Annotations {
-		log.GetLogger(ctx).Info(ann)
-	}
-	// slurm-job.knoc.io/flags
-
 	client, err := simplessh.ConnectWithKey(os.Getenv("REMOTE_HOST")+":"+os.Getenv("REMOTE_PORT"), os.Getenv("REMOTE_USER"), os.Getenv("REMOTE_KEY"))
 	if err != nil {
 		return err
