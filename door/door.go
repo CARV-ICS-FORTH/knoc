@@ -111,12 +111,19 @@ func produce_slurm_script(c DoorContainer, command []string) string {
 	if err != nil {
 		log.Fatalln("Cant create slurm_script")
 	}
+	var sbatch_flags_from_argo []string
+	var sbatch_flags_as_string = ""
+	if slurm_flags, ok := c.Metadata.Annotations["slurm-job.knoc.io/flags"]; ok {
+		sbatch_flags_from_argo = strings.Split(slurm_flags, " ")
+		log.Debugln(sbatch_flags_from_argo)
+	}
+	for _, slurm_flag := range sbatch_flags_from_argo {
+		sbatch_flags_as_string += "\n#SBATCH " + slurm_flag
+	}
 	sbatch_macros := "#!/bin/bash" +
-		"\n . ~/.bash_profile " +
 		"\n#SBATCH --job-name=" + c.Name +
-		"\n#SBATCH --ntasks=1" +
-		"\n#SBATCH --time=00:05:00" +
-		"\n#SBATCH --oversubscribe" +
+		sbatch_flags_as_string +
+		"\n . ~/.bash_profile " +
 		"\npwd; hostname; date\n"
 	f.WriteString(sbatch_macros + "\n" + strings.Join(command[:], " ") + " >> " + ".knoc/" + c.Name + ".out 2>> " + ".knoc/" + c.Name + ".err \n echo $? > " + ".knoc/" + c.Name + ".status")
 	f.Close()
@@ -126,16 +133,10 @@ func produce_slurm_script(c DoorContainer, command []string) string {
 func slurm_batch_submit(path string, c DoorContainer) string {
 	var output []byte
 	var err error
-	if slurm_flags, ok := c.Metadata.Annotations["slurm-job.knoc.io/flags"]; ok {
-		output, err = exec.Command(SBATCH, path, slurm_flags).Output()
-	} else {
-		output, err = exec.Command(SBATCH, path).Output()
-	}
+	output, err = exec.Command(SBATCH, path).Output()
 	if err != nil {
-		log.Fatalln("Could not run sbatch")
+		log.Fatalln("Could not run sbatch. " + err.Error())
 	}
-	env, err := exec.Command("env").Output()
-	log.Debugln(string(env), err)
 	return string(output)
 
 }
