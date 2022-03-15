@@ -117,13 +117,20 @@ func produce_slurm_script(c DoorContainer, command []string) string {
 		sbatch_flags_from_argo = strings.Split(slurm_flags, " ")
 		log.Debugln(sbatch_flags_from_argo)
 	}
+	if mpi_flags, ok := c.Metadata.Annotations["slurm-job.knoc.io/mpi-flags"]; ok {
+		if mpi_flags != "true" {
+			mpi := append([]string{"mpiexec", "-np", "$SLURM_NTASKS"}, strings.Split(mpi_flags, " ")...)
+			command = append(mpi, command...)
+		}
+		log.Debugln(mpi_flags)
+	}
 	for _, slurm_flag := range sbatch_flags_from_argo {
 		sbatch_flags_as_string += "\n#SBATCH " + slurm_flag
 	}
 	sbatch_macros := "#!/bin/bash" +
 		"\n#SBATCH --job-name=" + c.Name +
 		sbatch_flags_as_string +
-		"\n . ~/.bash_profile " +
+		"\n. ~/.bash_profile" +
 		"\npwd; hostname; date\n"
 	f.WriteString(sbatch_macros + "\n" + strings.Join(command[:], " ") + " >> " + ".knoc/" + c.Name + ".out 2>> " + ".knoc/" + c.Name + ".err \n echo $? > " + ".knoc/" + c.Name + ".status")
 	f.Close()
@@ -155,7 +162,7 @@ func handle_jid(c DoorContainer, output string) {
 func create_container(c DoorContainer) {
 	log.Debugln("create_container")
 
-	commstr1 := []string{"SINGULARITY_DISABLE_CACHE=false", "singularity", "exec"}
+	commstr1 := []string{"singularity", "exec"}
 
 	envs := prepare_env(c)
 	mounts := prepare_mounts(c)
