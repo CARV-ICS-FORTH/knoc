@@ -165,9 +165,18 @@ func create_container(c DoorContainer) {
 	commstr1 := []string{"singularity", "exec"}
 
 	envs := prepare_env(c)
+	image := ""
 	mounts := prepare_mounts(c)
-	image := "docker://" + c.Image
-
+	if strings.HasPrefix(c.Image, "/") {
+		if image_uri, ok := c.Metadata.Annotations["slurm-job.knoc.io/image-uri"]; ok {
+			log.Debugln(image_uri)
+			image = image_uri + c.Image
+		} else {
+			log.Errorln("image-uri annotation not specified for path in remote filesystem")
+		}
+	} else {
+		image = "docker://" + c.Image
+	}
 	singularity_command := append(commstr1, envs...)
 	singularity_command = append(singularity_command, mounts...)
 	singularity_command = append(singularity_command, image)

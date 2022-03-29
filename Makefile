@@ -71,5 +71,5 @@ skaffold/run skaffold/dev: bin/virtual-kubelet
 
 container: PROFILE := local
 container: skaffold.validate
-	skaffold build -f $(PWD)/deploy/skaffold.yml \
+	skaffold build --platform=linux/amd64 -f $(PWD)/deploy/skaffold.yml \
 		-p $(PROFILE)
