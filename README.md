@@ -1,7 +1,4 @@
-# Kubernetes Node on Cluster
-
-![diagram](media/knoc.png)
-<br>
+# KNoC - A Kubernetes Node to manage container lifecycle on HPC clusters
 
 KNoC is a [Virtual Kubelet](https://github.com/virtual-kubelet/virtual-kubelet) Provider implementation that manages real pods and containers in a remote container runtime by supporting the lifecycle management of pods, containers and other resources in the context of Kubernetes.
 
@@ -15,7 +12,7 @@ Remote environments include [Singularity](https://sylabs.io/singularity/) contai
 - Get pod, pods and pod status
 - Support for EmptyDirs, Secrets and ConfigMaps
 
-![diagram](media/architecture.png)
+![diagram](media/knoc-env.png)
 
 ## Installation
 - First, install [skaffold from here](https://skaffold.dev/docs/install/)
