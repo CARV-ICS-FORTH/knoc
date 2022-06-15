@@ -40,28 +40,6 @@ kubectl create secret generic remote-secret \
     --from-literal=port="<PORT>"
 ```
 
-*[OPTIONAL] Alternatively KNoC uses bitnami's [kubeseal](https://github.com/bitnami-labs/sealed-secrets) that encrypts the above secret for your cluster and creates a sealed-secret. KNoC requests the secrets values and kubeseal decrypts them upon request. Then KNoC uses the produced k8s secret and uses these values as enviromental variables inside the [KNoC's yaml](https://github.com/CARV-ICS-FORTH/knoc/blob/master/deploy/pod.yml)*
-
-- Create and add the sealed-secret inside the skaffold manifests:
-```bash
-# install bitnami's kubeseal
-wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.15.0/kubeseal-linux-amd64 -O kubeseal
-sudo install -m 755 kubeseal /usr/local/bin/kubeseal
-
-# deploy kubeseal's controller in our cluster
-kubectl apply -f https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.15.0/controller.yaml
-
-#encrypt it only for your k8s controller
-kubectl get secret remote-secret -o yaml > deploy/remote-secret.yml
-kubeseal < deploy/remote-secret.yml > deploy/sealed-remote-secret-crd.yaml
-
-#add the correct sealed-secret-crd file to the manifests of skaffold.yaml
-# i.e.
-# deploy:
-#  kubectl:
-#     manifests:
-#      - deploy/sealed-remote-secret-crd.yaml # <--------
-```
 
 ## Running
 ```bash

@@ -168,7 +168,7 @@ func create_container(c DoorContainer) {
 	image := ""
 	mounts := prepare_mounts(c)
 	if strings.HasPrefix(c.Image, "/") {
-		if image_uri, ok := c.Metadata.Annotations["slurm-job.knoc.io/image-uri"]; ok {
+		if image_uri, ok := c.Metadata.Annotations["slurm-job.knoc.io/image-root"]; ok {
 			log.Debugln(image_uri)
 			image = image_uri + c.Image
 		} else {

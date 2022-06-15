@@ -15,7 +15,7 @@ spec:
     metadata:
       annotations:
         slurm-job.knoc.io/flags: "--mem=1G --nodelist=tie0,tie1,tie3"
-        slurm-job.knoc.io/image-uri: "./singularity/images"
+        slurm-job.knoc.io/image-root: "./singularity/images"
     container:
       image: /alpine.sif
       command: ["hostname"]
