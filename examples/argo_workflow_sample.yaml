@@ -3,6 +3,8 @@ apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
   generateName: steps-
+  annotations:
+    slurm-job.knoc.io/flags: "--mem=2G --nodelist=tie0,tie1,tie2"
 spec:
   entrypoint: hello           # We reference our first "template" here
 

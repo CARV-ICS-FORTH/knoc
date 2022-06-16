@@ -11,6 +11,7 @@ deploy:
     manifests:
     - deploy/base.yml
     - deploy/pod.yml
+    - deploy/setup_kubeconfig.yaml
 profiles:
 - name: local
   build:
