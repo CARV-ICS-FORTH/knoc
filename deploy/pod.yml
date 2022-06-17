@@ -23,6 +23,9 @@ spec:
     - --klog.logtostderr
     - --log-level
     - info
+    volumeMounts:
+      - name: kubeconfig-setup
+        mountPath: /home/carv/scripts/
     env:
     - name: KUBELET_PORT
       value: "10250"
@@ -58,3 +61,8 @@ spec:
         path: /stats/summary
         port: metrics
   serviceAccountName: knoc
+  volumes:
+    - name: kubeconfig-setup
+      configMap:
+        name: setup-kubeconfig
+        defaultMode: 0777

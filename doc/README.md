@@ -34,19 +34,9 @@ kubectl create secret generic remote-secret \
 # Then socat forwards traffic from the <system_that_hosts_minikube> to the ip of minikube
 socat TCP-LISTEN:38080,fork TCP:$(minikube -p knoc ip):8443
 
-# Install the kubeconfig("default-config" file in project's root directory) inside the remote .kube directory and
-# include the files below in the remote .kube directory
-#     certificate-authority: local:$HOME/.minikube/ca.crt                 -> remote:~/.kube/ca.crt
-#     client-certificate: local:$HOME/.minikube/profiles/knoc/client.crt  -> remote:~/.kube/client.crt
-#     client-key: local:$HOME/.minikube/profiles/knoc/client.key          -> remote:~/.kube/client.key
 
-# the remote .kube directory must look like this:
-# -rw-r--r--  1 whoever users  1111 Jun 15 20:43 ca.crt
-# -rw-r--r--  1 whoever users  1148 Jun 15 20:44 client.crt
-# -rw-r--r--  1 whoever users  1676 Jun 15 20:44 client.key
-# -rw-r--r--  1 whoever users   701 Jun 15 20:45 config
-# 
-# 
+# you should change the CLUSTER_SERVER variable from the deploy/setup_kubeconfig.yaml
+# and after that you should run
 
 make skaffold
 

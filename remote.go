@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -169,6 +170,23 @@ func PrepareContainerData(p *KNOCProvider, ctx context.Context, client *simpless
 		panic(err)
 	}
 	defer c.Close()
+
+	//add kubeconfig on remote:$HOME
+	out, err := exec.Command("test -f .kube/config").Output()
+	if _, ok := err.(*exec.ExitError); !ok {
+		out, err = exec.Command("/bin/sh", "/home/carv/scripts/prepare_kubeconfig.sh").Output()
+		if err != nil {
+			fmt.Println("Could not setup kubeconfig on the remote system ")
+			panic(err)
+		}
+		client.Exec("mkdir -p .kube")
+		_, err = client.Exec("echo \"" + string(out) + "\" > .kube/config")
+		if err != nil {
+			fmt.Println("Could not setup kubeconfig on the remote system ")
+			panic(err)
+		}
+	}
+
 	client.Exec("mkdir -p " + ".knoc")
 	for _, mountSpec := range container.VolumeMounts {
 		podVolSpec := findPodVolumeSpec(pod, mountSpec.Name)
