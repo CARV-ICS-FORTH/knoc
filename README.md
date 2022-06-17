@@ -1,9 +1,11 @@
 # KNoC - A Kubernetes Node to manage container lifecycle on HPC clusters
 
-<p align="center">
-    <img src="./media/Dark.png#gh-light-mode-only" height="420" width="420" style="background-position: center center;background-repeat: no-repeat;">
-    <img src="./media/Light.png#gh-light-mode-only"  height="420" width="420" style="background-position: center center;background-repeat: no-repeat;">
-</p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="media/darkcrop.png">
+  <source media="(prefers-color-scheme: light)" srcset="media/lightcrop.png">
+  <img src="media/lightcrop.png">
+</picture>
+
 
 KNoC is a [Virtual Kubelet](https://github.com/virtual-kubelet/virtual-kubelet) Provider implementation that manages real pods and containers in a remote container runtime by supporting the lifecycle management of pods, containers and other resources in the context of Kubernetes.
 
