@@ -2,7 +2,7 @@ LINTER_BIN ?= golangci-lint
 
 GO111MODULE := on
 export GO111MODULE
-include Makefile.e2e
+# include Makefile.e2e
 
 .PHONY: build
 build: clean bin/virtual-kubelet bin/door
@@ -21,7 +21,7 @@ bin/door: door/door.go door/types.go
 .PHONY: clean
 clean: files := bin/virtual-kubelet
 clean: door_clean
-	@rm $(files) &>/dev/null || exit 0
+	@${RM} $(files) &>/dev/null || exit 0
 
 .PHONY: test
 test:
@@ -52,24 +52,24 @@ bin/%:
 	CGO_ENABLED=0 go build -ldflags '-extldflags "-static"' -o bin/$(*) $(VERSION_FLAGS) ./cmd/$(*)
 
 
-# skaffold deploys the virtual-kubelet to the Kubernetes cluster targeted by the current kubeconfig using skaffold.
-# The current context (as indicated by "kubectl config current-context") must be one of "minikube" or "docker-for-desktop".
-# MODE must be set to one of "dev" (default), "delete" or "run", and is used as the skaffold command to be run.
-.PHONY: skaffold
-skaffold: MODE ?= dev
-.SECONDEXPANSION:
-skaffold: skaffold/$$(MODE)
+# # skaffold deploys the virtual-kubelet to the Kubernetes cluster targeted by the current kubeconfig using skaffold.
+# # The current context (as indicated by "kubectl config current-context") must be one of "minikube" or "docker-for-desktop".
+# # MODE must be set to one of "dev" (default), "delete" or "run", and is used as the skaffold command to be run.
+# .PHONY: skaffold
+# skaffold: MODE ?= dev
+# .SECONDEXPANSION:
+# skaffold: skaffold/$$(MODE)
 
-.PHONY: skaffold/%
-skaffold/%: PROFILE := local
-skaffold/%: skaffold.validate
-	skaffold $(*) \
-		-f $(PWD)/deploy/skaffold.yml \
-		-p $(PROFILE)
+# .PHONY: skaffold/%
+# skaffold/%: PROFILE := local
+# skaffold/%: skaffold.validate
+# 	skaffold $(*) \
+# 		-f $(PWD)/deploy/skaffold.yml \
+# 		-p $(PROFILE)
 
-skaffold/run skaffold/dev: bin/virtual-kubelet
+# skaffold/run skaffold/dev: bin/virtual-kubelet
 
-container: PROFILE := local
-container: skaffold.validate
-	skaffold build --platform=linux/amd64 -f $(PWD)/deploy/skaffold.yml \
-		-p $(PROFILE)
+# container: PROFILE := local
+# container: skaffold.validate
+# 	skaffold build --platform=linux/amd64 -f $(PWD)/deploy/skaffold.yml \
+# 		-p $(PROFILE)

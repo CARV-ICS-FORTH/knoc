@@ -12,6 +12,8 @@ bin/
 deploy/remote-secret.yml
 deploy/sealed-remote-secret-crd.yaml
 
+doodling.sh
+
 # Test binary, build with `go test -c`
 *.test
 

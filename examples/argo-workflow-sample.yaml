@@ -4,7 +4,7 @@ kind: Workflow
 metadata:
   generateName: steps-
   annotations:
-    slurm-job.knoc.io/flags: "--mem=2G --nodelist=tie0,tie1,tie2"
+    slurm-job.knoc.io/flags: "--mem=2G --nodelist=tie1,tie2"
 spec:
   entrypoint: hello           # We reference our first "template" here
 

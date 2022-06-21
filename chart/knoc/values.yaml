@@ -1,0 +1,42 @@
+replicaCount: 1
+
+image:
+  repository: carvicsforth/knoc
+  pullPolicy: IfNotPresent
+  tag: ""
+
+
+knoc: {
+  enabledMetrics: false,
+  k8sApiServer: "",
+  logLevel: debug,
+  remoteSecret: {
+    address: "",
+    port: "",
+    user: "",
+    privkey: ""
+  }
+}
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+singleNamespace: false
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: "knoc"
+
+# podAnnotations: {}
+
+# podSecurityContext: {}
+#   # fsGroup: 2000
+
+
+# nodeSelector: {}
+
+# tolerations: []
+
+# affinity: {}

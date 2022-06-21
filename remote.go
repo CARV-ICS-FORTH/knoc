@@ -93,7 +93,7 @@ func prepareDoor(client *simplessh.Client) {
 	if !hasDoor(client) {
 		// Could not find KNoC's Door binary in the remote system...
 		// send door to remote
-		local := "/usr/bin/door" // from inside the container's root dir
+		local := "/usr/local/bin/door" // from inside the container's root dir
 		remote := "door"
 		common.UploadFile(client, local, remote, 0700)
 		// check again else die
@@ -174,17 +174,21 @@ func PrepareContainerData(p *KNOCProvider, ctx context.Context, client *simpless
 	//add kubeconfig on remote:$HOME
 	out, err := exec.Command("test -f .kube/config").Output()
 	if _, ok := err.(*exec.ExitError); !ok {
-		out, err = exec.Command("/bin/sh", "/home/carv/scripts/prepare_kubeconfig.sh").Output()
+		log.GetLogger(ctx).Debug("Kubeconfig doesn't exist, so we will generate it...")
+		out, err = exec.Command("/bin/sh", "/home/user0/scripts/prepare_kubeconfig.sh").Output()
 		if err != nil {
-			fmt.Println("Could not setup kubeconfig on the remote system ")
+			log.GetLogger(ctx).Errorln("Could not run kubeconfig_setup script!")
+			log.GetLogger(ctx).Error(string(out))
 			panic(err)
 		}
+		log.GetLogger(ctx).Debug("Kubeconfig generated")
 		client.Exec("mkdir -p .kube")
 		_, err = client.Exec("echo \"" + string(out) + "\" > .kube/config")
 		if err != nil {
-			fmt.Println("Could not setup kubeconfig on the remote system ")
+			log.GetLogger(ctx).Errorln("Could not setup kubeconfig on the remote system ")
 			panic(err)
 		}
+		log.GetLogger(ctx).Debug("Kubeconfig installed")
 	}
 
 	client.Exec("mkdir -p " + ".knoc")
