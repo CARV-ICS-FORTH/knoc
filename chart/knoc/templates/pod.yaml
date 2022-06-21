@@ -5,8 +5,8 @@ metadata:
 spec:
   containers:
   - name: vk-{{ .Release.Name }}
-    image: carvicsforth/knoc
-    imagePullPolicy: IfNotPresent
+    image: {{.Values.image.repository }}
+    imagePullPolicy: {{.Values.image.pullPolicy}}
     args:
     - virtual-kubelet
     - --nodename
