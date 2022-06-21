@@ -41,7 +41,7 @@ socat TCP-LISTEN:38080,fork TCP:$(minikube -p knoc ip):8443 &
 
 # And now you can run this
 
-helm install knoc chart/knoc --namespace default \
+helm upgrade --install --wait knoc chart/knoc --namespace default \
     --set knoc.k8sApiServer=https://<system_that_hosts_minikube>:38080 \
     --set knoc.remoteSecret.address="<target-system-ip>" \
     --set-string knoc.remoteSecret.port="<target-system-port>" \
@@ -50,7 +50,7 @@ helm install knoc chart/knoc --namespace default \
     --set knoc.remoteSecret.kubeContext="current-kubernetes-context"
 
 #i.e.
-# helm install knoc chart/knoc --namespace default \
+# helm upgrade --install --wait knoc chart/knoc --namespace default \
 #     --set knoc.k8sApiServer=https://139.91.92.71:38080 \
 #     --set knoc.remoteSecret.address="139.91.92.100" \
 #     --set-string knoc.remoteSecret.port="22" \
@@ -59,7 +59,7 @@ helm install knoc chart/knoc --namespace default \
 #     --set knoc.remoteSecret.kubeContext="$(kubectl config current-context)"
 
 
-# helm install knoc chart/knoc --namespace default \
+# helm upgrade --install --wait knoc chart/knoc --namespace default \
 #     --set knoc.k8sApiServer=https://$(curl ipinfo.io/ip):38080 \
 #     --set knoc.remoteSecret.address="139.91.92.100" \
 #     --set-string knoc.remoteSecret.port="22" \
