@@ -3,13 +3,14 @@ apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
   generateName: steps-
-  annotations:
-    slurm-job.knoc.io/flags: "--mem=2G --nodelist=tie1,tie2"
 spec:
-  entrypoint: hello           # We reference our first "template" here
+  entrypoint: hello
 
   templates:
-  - name: hello               # The first "template" in this Workflow, it is referenced by "entrypoint"
+  - name: hello               
+    metadata:
+      annotations:
+        slurm-job.knoc.io/flags: "--mem=2G --exclude=tie0,tie3,tie4"
     steps:                    # The type of this "template" is "steps"
     - - name: hello
         template: whalesay    # We reference our second "template" here
@@ -17,13 +18,15 @@ spec:
           parameters: [{name: message, value: "hello1"}]
 
   - name: whalesay             # The second "template" in this Workflow, it is referenced by "hello"
+    metadata:
+      annotations:
+        slurm-job.knoc.io/flags: "--mem=2G --exclude=tie0,tie3,tie4"
     inputs:
       parameters:
       - name: message
     container:                # The type of this "template" is "container"
-      image: docker/whalesay
-      command: [cowsay]
-      args: ["{{inputs.parameters.message}}"]
+      image: alpine:3.7
+      command: [echo, "{{inputs.parameters.message}}"]
   nodeSelector:
     kubernetes.io/role: agent
     beta.kubernetes.io/os: linux

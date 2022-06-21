@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ .Release.Name }}-vkubelet
 spec:
   containers:
   - name: vk-{{ .Release.Name }}
@@ -52,6 +52,11 @@ spec:
         secretKeyRef:
           name: {{ .Release.Name }}-remote-secret
           key: port
+    - name: KUBE_CURRENT_CONTEXT
+      valueFrom:
+        secretKeyRef:
+          name: {{ .Release.Name }}-remote-secret
+          key: kube_context
     {{- if .Values.knoc.enabledMetrics }}
     ports:
     - name: metrics
