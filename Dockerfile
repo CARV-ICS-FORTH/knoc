@@ -4,7 +4,6 @@ WORKDIR /build
 COPY . .
 RUN go mod tidy && go get
 RUN make build
-RUN ls -la /build/bin
 
 FROM ubuntu:latest
 RUN apt-get update && apt-get install -y openssh-server sudo curl

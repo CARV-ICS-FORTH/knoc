@@ -107,8 +107,8 @@ func prepareDoor(client *simplessh.Client) {
 
 func runRemoteExecutionInstance(ctx context.Context, client *simplessh.Client, imageLocation string, instance_name string, container v1.Container, meta metav1.ObjectMeta) ([]byte, error) {
 	b64dc := exportContainerb64Json(instance_name, container, meta)
-	output, err := client.Exec("bash -l -c \"nohup ./door -a submit -c " + b64dc + " -V >> door.log 2>> door.log < /dev/null & \"")
-	log.G(ctx).Debugf("bash -l -c \"nohup ./door -a submit -c " + b64dc + " -V >> door.log 2>> door.log < /dev/null & \"")
+	output, err := client.Exec("bash -l -c \"nohup ./door -a submit -c " + b64dc + " -V >> .knoc/door.log 2>> .knoc/door.log < /dev/null & \"")
+	log.G(ctx).Debugf("bash -l -c \"nohup ./door -a submit -c " + b64dc + " -V >> .knoc/door.log 2>> .knoc/door.log < /dev/null & \"")
 	if err != nil {
 		// Could not exec instance
 		return nil, err
@@ -125,8 +125,8 @@ func BuildRemoteExecutionPodName(pod *v1.Pod) string {
 
 func stopRemoteExecutionInstance(ctx context.Context, client *simplessh.Client, pod *v1.Pod, instance_name string, container v1.Container, meta metav1.ObjectMeta) ([]byte, error) {
 	b64dc := exportContainerb64Json(instance_name, container, meta)
-	output, err := client.Exec("bash -l -c \"nohup ./door -a stop -c " + b64dc + " -V >> door.log 2>> door.log < /dev/null & \"")
-	log.G(ctx).Debugf("bash -l -c \"nohup ./door -a stop -c " + b64dc + " -V >> door.log 2>> door.log < /dev/null & \"")
+	output, err := client.Exec("bash -l -c \"nohup ./door -a stop -c " + b64dc + " -V >> .knoc/door.log 2>> .knoc/door.log < /dev/null & \"")
+	log.G(ctx).Debugf("bash -l -c \"nohup ./door -a stop -c " + b64dc + " -V >> .knoc/door.log 2>> .knoc/door.log < /dev/null & \"")
 	if err != nil {
 		// Could not exec instance
 		return nil, err
@@ -209,7 +209,8 @@ func PrepareContainerData(p *KNOCProvider, ctx context.Context, client *simpless
 				continue
 			}
 			client.Exec("mkdir -p " + podConfigMapDir)
-			log.G(ctx).Infof("%v", "mkdir -p "+podConfigMapDir)
+			log.GetLogger(ctx).Debugf("%v", "create dir for configmaps "+podConfigMapDir)
+
 			for k, v := range configMap.Data {
 				// TODO: Ensure that these files are deleted in failure cases
 				fullPath := filepath.Join(podConfigMapDir, k)
@@ -233,9 +234,8 @@ func PrepareContainerData(p *KNOCProvider, ctx context.Context, client *simpless
 				continue
 			}
 			client.Exec("mkdir -p " + podSecretDir)
-			log.G(ctx).Debugf("%v", "mkdir -p "+podSecretDir)
+			log.GetLogger(ctx).Debugf("%v", "create dir for secrets "+podSecretDir)
 			for k, v := range secret.Data {
-				// TODO: Ensure that these files are deleted in failure cases
 				fullPath := filepath.Join(podSecretDir, k)
 				common.UploadData(client, []byte(v), fullPath, fs.FileMode(*mode))
 				if err != nil {
@@ -268,7 +268,7 @@ func checkPodsStatus(p *KNOCProvider, ctx context.Context) {
 	if len(p.pods) == 0 {
 		return
 	}
-	log.GetLogger(ctx).Info("received checkPodStatus")
+	log.GetLogger(ctx).Debug("received checkPodStatus")
 	client, err := simplessh.ConnectWithKey(os.Getenv("REMOTE_HOST")+":"+os.Getenv("REMOTE_PORT"), os.Getenv("REMOTE_USER"), os.Getenv("REMOTE_KEY"))
 	if err != nil {
 		panic(err)

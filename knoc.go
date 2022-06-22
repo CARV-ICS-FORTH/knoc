@@ -364,7 +364,6 @@ func (p *KNOCProvider) GetContainerLogs(ctx context.Context, namespace, podName,
 		panic(err)
 	}
 	defer client.Close()
-	fmt.Println(" ----------------------------------------------------\n ")
 	key, err := common.BuildKeyFromNames(namespace, podName)
 	if err != nil {
 		return nil, err

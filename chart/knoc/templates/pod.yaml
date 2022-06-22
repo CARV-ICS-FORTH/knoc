@@ -21,7 +21,7 @@ spec:
     - "2"
     - --klog.logtostderr
     - --log-level
-    - {{- if .Values.logLevel }} {{ .Values.knoc.logLevel }} {{- else }} info {{- end }}
+    - {{ .Values.knoc.logLevel }}
     volumeMounts:
       - name: kubeconfig-setup
         mountPath: /home/user0/scripts/
