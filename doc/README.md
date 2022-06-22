@@ -30,18 +30,20 @@ $ export ADVERTISED_HOST=$(curl ipinfo.io/ip)
 $ export API_SERVER_PORT=8443
 $ export PROXY_API_SERVER_PORT=38080
 $ export KUBE_PROXY=${ADVERTISED_HOST}:${PROXY_API_SERVER_PORT}
-
-$ minikube start -p ${MINIKUBE_PROFILE} --kubernetes-version=v1.19.13 --apiserver-ips=${ADVERTISED_HOST}
-$ eval $(minikube -p $MINIKUBE_PROFILE docker-env) 
 ```
 
 ```bash
+$ minikube start -p ${MINIKUBE_PROFILE} --kubernetes-version=v1.19.13 --apiserver-ips=${ADVERTISED_HOST}
+$ eval $(minikube -p $MINIKUBE_PROFILE docker-env) 
+
 # Expose Kubernetes API server from minikube, using socat. 
 # This is required for the argo executor that needs connection to the K8s Api server
 # Then socat forwards traffic from the <system_that_hosts_minikube> to the ip of minikube
 # redirect web traffic from one server to the local
 $ socat TCP-LISTEN:${PROXY_API_SERVER_PORT},fork TCP:$(minikube -p $MINIKUBE_PROFILE ip):${API_SERVER_PORT} &
+```
 
+```bash
 # Create alias because malvag is very very mal...
 $ alias kubectl='minikube -p knoc kubectl --'
 
@@ -53,6 +55,9 @@ $ kubectl config view > ~/.kube/config
 Before using kubectl or docker commands, you have to first configure the terminal session you are in, with the command below:
 ```bash
 $ export HELM_RELEASE=knoc
+$ export SLURM_CLUSTER_IP=thegates
+$ export SLURM_CLUSTER_USER=$(whoami)
+$ export SLURM_CLUSTER_SSH_PRIV=/home/${SLURM_CLUSTER_USER}/.ssh/id_rsa
 ```
     
 ```bash
@@ -63,10 +68,6 @@ $ cd KNoC
 # setup argo in our cluster (Argo 3.0.2) that uses a slightly modified version of k8sapi-executor
 $ kubectl create ns argo
 $ kubectl apply -n argo -f deploy/argo-install.yaml
-
-$ export SLURM_CLUSTER_IP=thegates
-$ export SLURM_CLUSTER_USER=$(whoami)
-$ export SLURM_CLUSTER_SSH_PRIV=/home/${SLURM_CLUSTER_USER}/.ssh/id_rsa
 
 
 # And now you can run this
