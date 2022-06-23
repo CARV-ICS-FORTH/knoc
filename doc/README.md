@@ -89,8 +89,8 @@ $ helm upgrade --install --debug --wait $HELM_RELEASE chart/knoc --namespace def
     --set knoc.k8sApiServer=https://${KUBE_PROXY} \
     --set knoc.remoteSecret.address=${SLURM_CLUSTER_IP} \
     --set knoc.remoteSecret.user=${SLURM_CLUSTER_USER}  \
-    --set knoc.remoteSecret.privkey="$(cat ${SLURM_CLUSTER_SSH_PRIV})" \
-    --set knoc.remoteSecret.kubeContext="current-kubernetes-context"
+    --set knoc.remoteSecret.kubeContext=$(kubectl config current-context)   \ 
+    --set knoc.remoteSecret.privkey="$(cat ${SLURM_CLUSTER_SSH_PRIV})"    
 
 
 # now we can test our KNoC deployment
