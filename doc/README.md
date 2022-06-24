@@ -125,6 +125,12 @@ helm upgrade --install --debug --wait $HELM_RELEASE chart/knoc --namespace defau
 # now we can test our KNoC deployment
 kubectl create -f examples/argo-workflow-sample.yaml
 
+ -- example output: 
+ ```bash
+ workflow.argoproj.io/steps-pzvmd created
+```
+
+
 # delete the workflow running
 kubectl delete workflow $(kubectl get workflow --no-headers | cut -f1 -d' ')
 ```
@@ -174,5 +180,6 @@ sudo rm -rf /etc/kubernetes/
 
 # ++ optionally: if you run minikube on docker
 docker system prune -af --volumes
+systemctl stop docker
 # ++
 ```
