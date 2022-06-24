@@ -99,9 +99,9 @@ export SLURM_CLUSTER_IP=139.91.92.100
 export SLURM_CLUSTER_USER=$(whoami)
 export SLURM_CLUSTER_SSH_PRIV=/home/${SLURM_CLUSTER_USER}/.ssh/id_rsa
 ```
-#########################################################################################
-### Make sure that you can login on the remote side using your private ssh key
-#########################################################################################
+#################################################################
+#### Make sure that you can login on the remote side using your private ssh key
+#################################################################
 ```bash
 # Download the source code
 git clone git@github.com:CARV-ICS-FORTH/KNoC.git
