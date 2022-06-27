@@ -132,6 +132,7 @@ kubectl create -f examples/argo-workflow-sample.yaml
 
 
 # delete the workflow running
+```
 kubectl delete workflow $(kubectl get workflow --no-headers | cut -f1 -d' ')
 ```
 
