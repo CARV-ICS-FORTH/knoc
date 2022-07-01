@@ -1,8 +1,17 @@
+1. [Install Dependencies](#install-dependencies)
+    - [Docker](#docker)
+    - [Minikube](#minikube)
+    - [Helm](#helm)
+2. [Deployment](#deployment)
+    1. [Create a single-node Kubernetes cluster with Minikube](#start-minikube)
+    2. [Deploy KNoC as a Kubernetes node](#deploy-knoc)
+3. [Testing](#testing-our-deployment)
+4. [Uninstall KNoC and Minikube](#tear-down)
 
 # Install Dependencies
 
 ## Docker
-Install docker following the guide [here](https://docs.docker.com/engine/install/ubuntu/)
+Install docker following the guide [here](https://docs.docker.com/engine/install/).
 
 Next start docker service and enable the permissions needed for the user
 ```bash
@@ -43,6 +52,7 @@ chmod 700 get_helm.sh
 ./get_helm.sh
 ```
 
+# Deployment
 ## Start Minikube
 In order to create a minikube single-node-cluster,
 you need to specify the minikube profile and the ip where the minikube's Kubernetes will listen to, for external requests.
@@ -90,7 +100,7 @@ echo "alias kubectl='minikube -p knoc kubectl --'" >> /home/$(whoami)/.bashrc
 # . ~/.bashrc
 ```
 
-# Run a workflow on Kubernetes
+## Deploy KNOC
 
 Before using kubectl or docker commands, you have to first configure the terminal session you are in, with the command below:
 ```bash
@@ -121,17 +131,27 @@ helm upgrade --install --debug --wait $HELM_RELEASE chart/knoc --namespace defau
     --set knoc.remoteSecret.kubeContext=$(kubectl config current-context) \
     --set knoc.remoteSecret.privkey="$(cat ${SLURM_CLUSTER_SSH_PRIV})"    
 
+```
 
-# now we can test our KNoC deployment
+## Testing our deployment
+You can test our deployment is working by submiting a sample workflow to argo:
+```bash
 kubectl create -f examples/argo-workflow-sample.yaml
 
  -- example output: 
  ```bash
  workflow.argoproj.io/steps-pzvmd created
 ```
+You can check that eveything works fine by executing the follow command after a minute or two:
+```bash
+kubectl get pods  # List all pods in the namespace
 
+NAME                    READY     STATUS      RESTARTS   AGE
+sample-workflow-bws9f   0/2       Completed   0          6m 
+```
+You can expect to see the final state is going to be "Completed".
 
-# delete the workflow running
+### Delete the sample workflow
 ```
 kubectl delete workflow $(kubectl get workflow --no-headers | cut -f1 -d' ')
 ```
