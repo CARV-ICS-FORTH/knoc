@@ -139,7 +139,6 @@ You can test our deployment is working by submiting a sample workflow to argo:
 kubectl create -f examples/argo-workflow-sample.yaml
 
  -- example output: 
- ```bash
  workflow.argoproj.io/steps-pzvmd created
 ```
 You can check that eveything works fine by executing the follow command after a minute or two:
