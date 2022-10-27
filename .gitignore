@@ -6,9 +6,7 @@
 bin/
 
 # Certificates
-*.pem
-!deploy/vkubelet-knoc-0-crt.pem
-!deploy/vkubelet-knoc-0-key.pem
+# *.pem
 deploy/remote-secret.yml
 deploy/sealed-remote-secret-crd.yaml
 

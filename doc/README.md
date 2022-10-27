@@ -61,7 +61,7 @@ you need to specify the minikube profile and the ip where the minikube's Kuberne
 
 ```bash
 export MINIKUBE_PROFILE=knoc
-export ADVERTISED_HOST=$(curl ipinfo.io/ip)
+export ADVERTISED_HOST=139.91.92.71
 export API_SERVER_PORT=8443
 export PROXY_API_SERVER_PORT=38080
 export KUBE_PROXY=${ADVERTISED_HOST}:${PROXY_API_SERVER_PORT}
@@ -116,6 +116,9 @@ export SLURM_CLUSTER_SSH_PRIV=/home/${SLURM_CLUSTER_USER}/.ssh/id_rsa
 # Download the source code
 git clone git@github.com:CARV-ICS-FORTH/KNoC.git
 cd KNoC
+
+#build the container
+docker build -t carvicsforth/malvag:latest .
 
 # setup vanilla argo in our cluster (Argo 3.0.2) that uses a slightly modified version of k8sapi-executor
 kubectl create ns argo
