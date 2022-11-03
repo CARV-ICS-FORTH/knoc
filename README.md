@@ -23,3 +23,7 @@ Remote environments include [Singularity](https://sylabs.io/singularity/) contai
 
 ## Documentation
 You can find all relative information in [Documentation](https://github.com/CARV-ICS-FORTH/KNoC/blob/master/doc/README.md)
+
+## Acknowledgements
+
+We thankfully acknowledge the support of the European Commission and the Greek General Secretariat for Research and Innovation under the EuroHPC Programme through projects EUROCC (GA-951732) and DEEP-SEA (GA-955606). National contributions from the involved state members (including the Greek General Secretariat for Research and Innovation) match the EuroHPC funding.
