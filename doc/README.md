@@ -118,7 +118,7 @@ git clone git@github.com:CARV-ICS-FORTH/KNoC.git
 cd KNoC
 
 #build the container
-docker build -t carvicsforth/malvag:latest .
+docker build -t malvag/knoc:latest .
 
 # setup vanilla argo in our cluster (Argo 3.0.2) that uses a slightly modified version of k8sapi-executor
 kubectl create ns argo
