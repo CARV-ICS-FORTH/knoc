@@ -21,8 +21,8 @@ Remote environments include [Singularity](https://sylabs.io/singularity/) contai
 
 ![diagram](media/knoc-env.png)
 
-## Documentation
-You can find all relative information in [Documentation](https://github.com/CARV-ICS-FORTH/KNoC/blob/master/doc/README.md)
+## Installation
+You can find all relative information in [INSTALL](https://github.com/CARV-ICS-FORTH/KNoC/blob/master/INSTALL.md).
 
 ## Acknowledgements
 
