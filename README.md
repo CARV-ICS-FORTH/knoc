@@ -26,4 +26,4 @@ You can find all relative information in [INSTALL](https://github.com/CARV-ICS-F
 
 ## Acknowledgements
 
-We thankfully acknowledge the support of the European Commission and the Greek General Secretariat for Research and Innovation under the EuroHPC Programme through projects EUROCC (GA-951732) and DEEP-SEA (GA-955606). National contributions from the involved state members (including the Greek General Secretariat for Research and Innovation) match the EuroHPC funding.
+We thankfully acknowledge the support of the European Commission and the Greek General Secretariat for Research and Innovation under the European High-Performance Computing Joint Undertaking (JU) through projects EUROCC (GA-951732), DEEP-SEA (GA-955606), and EUPEX (GA-101033975). The JU receives support from the European Union's Horizon 2020 research and innovation programme and France, Germany, Italy, Greece, United Kingdom, the Czech Republic, and Croatia. National contributions from the involved state members (including the Greek General Secretariat for Research and Innovation) match the JU's funding.
